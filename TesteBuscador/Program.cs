@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Text;
 using TesteBuscador;
 
 Console.WriteLine("Busque aqui: ");
@@ -47,6 +48,7 @@ while (html.Contains("<a href=\"/url?q="))
     var str = getBetween(html, "<a href=\"/url?q=", ">");
     var len = str.Length;
     var link = str.Contains("%") ? str.Substring(0, findNthOccur(str, '"', 1)) : str.Substring(0, findNthOccur(str, '&', 1));
+    /*Encoding.Convert(Encoding.ASCII, Encoding.UTF8, Byte.Parse(link));*/
 
     string str2;
     try
@@ -76,11 +78,11 @@ while (html.Contains("<a href=\"/url?q="))
 }
 
 
-//foreach (KeyValuePair<string, string> kvp in _lista)
-//{
-//    Console.WriteLine("Key = {0}, Value = {1}",
-//        kvp.Key, kvp.Value);
-//}
+foreach (KeyValuePair<string, string> kvp in _lista)
+{
+    Console.WriteLine("Key = {0}, Value = {1}",
+        kvp.Key, kvp.Value);
+}
 
-var c = JsonConvert.SerializeObject(_lista);
-Console.WriteLine(c);
+//var c = JsonConvert.SerializeObject(_lista);
+//Console.WriteLine(c);
