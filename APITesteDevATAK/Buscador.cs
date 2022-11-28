@@ -1,8 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Net.Http.Headers;
-using APITesteDevAtak.util;
-using System.Net.Http;
 using APITesteDevAtak.model;
+using APITesteDevAtak.util;
 
 namespace APITesteDevAtak
 {
@@ -12,10 +11,11 @@ namespace APITesteDevAtak
 
         public static async Task<string> GetHtmlAsync(string strABuscar)
         {
-            if (client.BaseAddress == null)
+            if(client.BaseAddress == null)
             {
                 client.BaseAddress = new Uri($"https://www.google.com/search?q={strABuscar}&ie=UTF-8");
-            }else
+
+            } else
             {
                 client = new HttpClient();
                 client.BaseAddress = new Uri($"https://www.google.com/search?q={strABuscar}&ie=UTF-8");
@@ -43,12 +43,35 @@ namespace APITesteDevAtak
             Resultado resul = new Resultado();
             resul.Resultados = new List<ResultadoPesquisa>();
 
+            trataString(resul, html);
+            
+
+            var json = JsonConvert.SerializeObject(resul);
+            return json;
+        }
+
+        private static void trataString(Resultado resul, String html)
+        {
             while (html.Contains("<a href=\"/url?q="))
             {
 
                 var str = Utils.getBetween(html, "<a href=\"/url?q=", ">");
                 var len = str.Length;
                 var link = str.Contains("%") ? str.Substring(0, Utils.findNthOccur(str, '"', 1)) : str.Substring(0, Utils.findNthOccur(str, '&', 1));
+
+                if (link.Contains("&amp"))
+                {
+                    link = Utils.replaceAccent(link);
+                    try
+                    {
+                        link = link.Substring(0, link.IndexOf("&amp") - 1);
+
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
 
                 string str2;
                 try
@@ -80,10 +103,6 @@ namespace APITesteDevAtak
                 }
                 html = html.Substring(html.IndexOf(">") + len);
             }
-
-            var json = JsonConvert.SerializeObject(resul);
-            return json;
         }
-
     }
 }

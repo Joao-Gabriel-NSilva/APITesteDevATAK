@@ -68,7 +68,7 @@ namespace TesteBuscador.util
                     str = str.Replace(key, rep_hexa[key].ToString());
                 }
             }
-            return str;
+            return HttpUtility.UrlDecode(str);
         }
 
     }

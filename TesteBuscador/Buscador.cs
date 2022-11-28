@@ -36,7 +36,15 @@ namespace TesteBuscador
             Resultado resul = new Resultado();
             resul.Resultados = new List<ResultadoPesquisa>();
 
+            trataString(resul, html);
+            
 
+            var json = JsonConvert.SerializeObject(resul);
+            return json;
+        }
+
+        private static void trataString(Resultado resul, String html)
+        {
             while (html.Contains("<a href=\"/url?q="))
             {
 
@@ -44,10 +52,18 @@ namespace TesteBuscador
                 var len = str.Length;
                 var link = str.Contains("%") ? str.Substring(0, Utils.findNthOccur(str, '"', 1)) : str.Substring(0, Utils.findNthOccur(str, '&', 1));
 
-                if(link.Contains("&amp"))
+                if (link.Contains("&amp"))
                 {
                     link = Utils.replaceAccent(link);
-                    link = link.Substring(0, Utils.findNthOccur(link, '?', 1));
+                    try
+                    {
+                        link = link.Substring(0, link.IndexOf("&amp") - 1);
+
+                    }
+                    catch (Exception)
+                    {
+
+                    }
                 }
 
                 string str2;
@@ -80,10 +96,6 @@ namespace TesteBuscador
                 }
                 html = html.Substring(html.IndexOf(">") + len);
             }
-
-            var json = JsonConvert.SerializeObject(resul);
-            return json;
         }
-
     }
 }
