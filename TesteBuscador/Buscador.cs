@@ -2,6 +2,7 @@
 using System.Net.Http.Headers;
 using TesteBuscador.model;
 using TesteBuscador.util;
+using System.Web;
 
 namespace TesteBuscador
 {
@@ -42,6 +43,12 @@ namespace TesteBuscador
                 var str = Utils.getBetween(html, "<a href=\"/url?q=", ">");
                 var len = str.Length;
                 var link = str.Contains("%") ? str.Substring(0, Utils.findNthOccur(str, '"', 1)) : str.Substring(0, Utils.findNthOccur(str, '&', 1));
+
+                if(link.Contains("&amp"))
+                {
+                    link = Utils.replaceAccent(link);
+                    link = link.Substring(0, Utils.findNthOccur(link, '?', 1));
+                }
 
                 string str2;
                 try

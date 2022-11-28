@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace TesteBuscador.util
 {
@@ -37,6 +38,37 @@ namespace TesteBuscador.util
             }
 
             return "";
+        }
+
+        public static string replaceAccent(string str)
+        {
+            var caracteres_acentuados = new List<char>() { 'á', 'Á', 'à', 'À', 'ã', 'Ã', 'é', 'É', 'ó', 'Ó', 'ô', 'Ô', 'á', 'á', 'á', 'Í', 'ú', 'Ú', 'ç', 'Ç', ' ' };
+            var rep_hexa = new Dictionary<string, char>();
+            str = HttpUtility.UrlDecode(str);
+
+            foreach (var a in caracteres_acentuados)
+            {
+                try
+                {
+                    rep_hexa.Add(Uri.HexEscape(a), a);
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            foreach (var key in rep_hexa.Keys)
+            {
+                if (str.Contains(key))
+                {
+                    if (key == "%C3")
+                    {
+                        str = str.Replace(key, "á");
+                    }
+                    str = str.Replace(key, rep_hexa[key].ToString());
+                }
+            }
+            return str;
         }
 
     }
