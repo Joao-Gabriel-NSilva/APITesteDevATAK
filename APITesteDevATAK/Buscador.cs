@@ -64,7 +64,13 @@ namespace APITesteDevAtak
                     link = Utils.replaceAccent(link);
                     try
                     {
-                        link = link.Substring(0, link.IndexOf("&amp") - 1);
+                        if(!link.Contains("youtube"))
+                        {
+                            link = link.Substring(0, link.IndexOf("&amp") - 1);
+                        } else
+                        {
+                            link = link.Substring(0, link.IndexOf("&amp"));
+                        }
 
                     }
                     catch (Exception)
