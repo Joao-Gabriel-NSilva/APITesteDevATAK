@@ -48,7 +48,7 @@ while (html.Contains("<a href=\"/url?q="))
     var str = getBetween(html, "<a href=\"/url?q=", ">");
     var len = str.Length;
     var link = str.Contains("%") ? str.Substring(0, findNthOccur(str, '"', 1)) : str.Substring(0, findNthOccur(str, '&', 1));
-    /*Encoding.Convert(Encoding.ASCII, Encoding.UTF8, Byte.Parse(link));*/
+    /*Encoding.Convert(Encoding.ASCII, Encoding.UTF8, Byte.Parse(link)); https://stackoverflow.com/questions/1922199/c-sharp-convert-string-from-utf-8-to-iso-8859-1-latin1-h*/
 
     string str2;
     try
